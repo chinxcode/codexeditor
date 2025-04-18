@@ -20,6 +20,10 @@ export default function Home() {
     const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
+    console.log("Session data:", session); // Debug log
+    console.log("Session status:", status); // Debug log
+    console.log("Is authenticated:", isAuthenticated); // Debug log
+
     // Close menu when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -168,10 +172,10 @@ export default function Home() {
             {/* Header */}
             <header className={styles.header}>
                 <div className={styles.headerContent}>
-                    <div className={styles.logo}>
+                    <Link href="https://codexeditor.vercel.app" className={styles.logo}>
                         <FiCode size={24} />
                         <h1>CodeXeditor</h1>
-                    </div>
+                    </Link>
 
                     <div className={`${styles.navLinks} ${isMenuOpen ? styles.active : ""}`}>
                         <Link href="#features">Features</Link>
