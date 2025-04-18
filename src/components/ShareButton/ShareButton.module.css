@@ -1,0 +1,195 @@
+.topbarShareButton {
+    background-color: transparent;
+    border: 1px solid #4ecdc4;
+    color: #4ecdc4;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.topbarShareButton:hover {
+    background-color: rgba(78, 205, 196, 0.1);
+    transform: translateY(-1px);
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.shareModal {
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #333;
+}
+
+.modalHeader h3 {
+    margin: 0;
+    color: #e0e0e0;
+    font-size: 1.3rem;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+    color: #e0e0e0;
+}
+
+.modalContent {
+    padding: 1.5rem;
+    position: relative;
+}
+
+.shareDescription {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #aaa;
+    font-size: 0.95rem;
+}
+
+.linkTypeSelector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.linkType {
+    padding: 0.5rem 1rem;
+    background: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #aaa;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.linkType:hover {
+    background: #333;
+    color: #e0e0e0;
+}
+
+.linkType.active {
+    background: #4ecdc4;
+    color: #121212;
+    border-color: #4ecdc4;
+}
+
+.shareLinkContainer {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.shareUrlInput {
+    flex-grow: 1;
+    padding: 0.75rem;
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.copyButton {
+    background-color: #4ecdc4;
+    color: #121212;
+    border: none;
+    border-radius: 4px;
+    padding: 0 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.copyButton:hover {
+    background-color: #45b7b0;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 1rem;
+    right: 1.5rem;
+    background: #4ecdc4;
+    color: #121212;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .shareModal {
+        width: 95%;
+    }
+
+    .shareLinkContainer {
+        flex-direction: column;
+    }
+
+    .copyButton {
+        padding: 0.75rem;
+        justify-content: center;
+    }
+}
