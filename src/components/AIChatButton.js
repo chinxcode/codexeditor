@@ -1,27 +1,41 @@
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import ChatBot from "./ChatBot";
 import { FiCode } from "react-icons/fi";
 
-const AIChatButton = () => {
+const AIChatButton = ({ onCodeGenerated }) => {
     const { data: session } = useSession();
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
 
     const toggleChat = () => {
-        setIsChatOpen(!isChatOpen);
+        if (!session) {
+            // If not logged in, show login modal instead
+            signIn();
+        } else {
+            setIsChatOpen(!isChatOpen);
+        }
     };
 
-    // Only show the chat button for authenticated users
-    if (!session) return null;
+    // Handle code generated from the AI
+    const handleCodeGenerated = (code) => {
+        if (onCodeGenerated) {
+            onCodeGenerated(code);
+        }
+    };
 
     return (
         <>
-            <button onClick={toggleChat} className="topbar-chat-button" title={isChatOpen ? "Close AI Assistant" : "Open AI Assistant"}>
+            <button
+                onClick={toggleChat}
+                className="topbar-chat-button"
+                title={session ? (isChatOpen ? "Close AI Assistant" : "Open AI Assistant") : "Login to use AI Assistant"}
+            >
                 <FiCode size={16} />
                 <span>AI Assistant</span>
             </button>
 
-            {isChatOpen && <ChatBot isOpen={isChatOpen} toggleChat={toggleChat} />}
+            {session && isChatOpen && <ChatBot isOpen={isChatOpen} toggleChat={toggleChat} onCodeGenerated={handleCodeGenerated} />}
         </>
     );
 };

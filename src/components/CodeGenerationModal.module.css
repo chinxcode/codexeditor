@@ -1,0 +1,211 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+}
+
+.modalHeader h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.modalControls {
+    display: flex;
+    gap: 10px;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.closeButton:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.previewButton {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: transparent;
+    border: 1px solid #4ecdc4;
+    color: #4ecdc4;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.previewButton:hover {
+    background-color: rgba(78, 205, 196, 0.1);
+}
+
+.modalContent {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.codePreview {
+    background-color: #252525;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+.tabContainer {
+    display: flex;
+    background-color: #2d2d2d;
+    border-bottom: 1px solid #333;
+}
+
+.tab {
+    padding: 8px 15px;
+    color: #ccc;
+    font-size: 0.9rem;
+    border-right: 1px solid #333;
+}
+
+.codeContainer {
+    padding: 15px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.markdownContent {
+    color: #ddd;
+    font-family: 'Fira Code', monospace;
+}
+
+.markdownContent pre {
+    background-color: #2d2d2d;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 15px 0;
+}
+
+.markdownContent code {
+    font-family: 'Fira Code', monospace;
+}
+
+.codeBlockWrapper {
+    margin: 15px 0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.codeHeader {
+    background-color: #333;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.codeLanguage {
+    color: #aaa;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.actionButtons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.acceptButton, .rejectButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.acceptButton {
+    background-color: #4ecdc4;
+    color: #1e1e1e;
+    border: none;
+}
+
+.acceptButton:hover {
+    background-color: #3db9b1;
+    transform: translateY(-1px);
+}
+
+.rejectButton {
+    background-color: transparent;
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+}
+
+.rejectButton:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+    transform: translateY(-1px);
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.loader {
+    border: 3px solid #333;
+    border-radius: 50%;
+    border-top: 3px solid #4ecdc4;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

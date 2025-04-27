@@ -159,6 +159,29 @@ export default function CodeEditor({ initialData, readOnly, editCode, viewCode }
         router.push("/dashboard");
     };
 
+    // Handle code generated from AI
+    const handleCodeGenerated = (generatedCode) => {
+        if (readOnly) return; // Don't update if in read-only mode
+
+        const { html: generatedHtml, css: generatedCss, js: generatedJs } = generatedCode;
+
+        // Update the code in each tab
+        if (generatedHtml) {
+            setHtml(generatedHtml);
+        }
+
+        if (generatedCss) {
+            setCss(generatedCss);
+        }
+
+        if (generatedJs) {
+            setJs(generatedJs);
+        }
+
+        // Save the project with the new code
+        saveProject();
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.topBar}>
@@ -240,11 +263,9 @@ export default function CodeEditor({ initialData, readOnly, editCode, viewCode }
                             <ShareButton editCode={editCode} viewCode={viewCode} />
                         </div>
                     )}
-                    {!readOnly && (
-                        <div className={styles.aiAssistantContainer}>
-                            <AIChatButton />
-                        </div>
-                    )}
+                    <div className={styles.aiAssistantContainer}>
+                        <AIChatButton onCodeGenerated={handleCodeGenerated} />
+                    </div>
                 </div>
             </div>
 
