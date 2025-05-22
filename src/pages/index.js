@@ -155,6 +155,7 @@ export default function Home() {
                     content="CodeXeditor is a modern code editor for HTML, CSS, and JavaScript with real-time preview, AI-powered code help, and easy sharing features."
                 />
                 <meta name="keywords" content="code editor, HTML, CSS, JavaScript, AI, coding assistant, web development, programming" />
+                <meta name="google-site-verification" content="8oBCVUQA3NnZBCFuNIIBnKJ4leLbHUKTwL7X9LXAA4E" />
                 <meta name="author" content="Sachin Sharma" />
                 <meta property="og:title" content="CodeXeditor - Interactive Code Editor with AI Assistance" />
                 <meta
