@@ -46,20 +46,19 @@ export const authOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID || "",
             clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
         }),
-        GithubProvider({
-            clientId: process.env.GITHUB_CLIENT_ID || "",
-            clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-        }),
     ],
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, account }) {
             if (user) {
+                // For OAuth providers, the user.id should already be set to MongoDB _id in signIn callback
+                console.log("JWT Callback - Setting token.id to:", user.id);
                 token.id = user.id;
             }
             return token;
         },
         async session({ session, token }) {
             if (token) {
+                console.log("Session Callback - Setting session.user.id to:", token.id);
                 session.user.id = token.id;
             }
             return session;
@@ -70,6 +69,9 @@ export const authOptions = {
                 await dbConnect();
 
                 try {
+                    console.log("OAuth Sign In - Original user ID:", user.id);
+                    console.log("OAuth Sign In - User email:", user.email);
+
                     // Check if user exists
                     let dbUser = await User.findOne({ email: user.email });
 
@@ -82,13 +84,20 @@ export const authOptions = {
                             // Create a random secure password for OAuth users
                             password: Math.random().toString(36).slice(-16) + Math.random().toString(36).slice(-16),
                         });
+                        console.log("OAuth Sign In - Created new user with MongoDB ID:", dbUser._id.toString());
+                    } else {
+                        console.log("OAuth Sign In - Found existing user with MongoDB ID:", dbUser._id.toString());
                     }
 
                     // Update OAuth user's info if they already exist
-                    else if (!dbUser.avatar && user.image) {
+                    if (!dbUser.avatar && user.image) {
                         dbUser.avatar = user.image;
                         await dbUser.save();
                     }
+
+                    // IMPORTANT: Update the user.id with MongoDB's _id
+                    user.id = dbUser._id.toString();
+                    console.log("OAuth Sign In - Final user ID set to:", user.id);
 
                     return true;
                 } catch (error) {

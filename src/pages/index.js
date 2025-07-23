@@ -52,11 +52,8 @@ export default function Home() {
     }, [isMenuOpen]);
 
     const startNewEditor = () => {
-        if (isAuthenticated) {
-            setIsCreateModalOpen(true);
-        } else {
-            setIsLoginModalOpen(true);
-        }
+        // Always allow users to create projects, authenticated or not
+        setIsCreateModalOpen(true);
     };
 
     const toggleMenu = () => {
@@ -106,10 +103,10 @@ export default function Home() {
         setIsCreateModalOpen(false);
     };
 
-    const isSmallScreen = typeof window !== "undefined" && window.innerWidth < 768;
+    const isSmallScreen = typeof window !== "undefined" && window.innerWidth < 790;
 
     const handleResize = () => {
-        if (isMenuOpen && window.innerWidth >= 768) {
+        if (isMenuOpen && window.innerWidth >= 1124) {
             setIsMenuOpen(false);
         }
     };

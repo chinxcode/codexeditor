@@ -1,15 +1,31 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { FiX, FiMail, FiLock } from "react-icons/fi";
+import { FcGoogle } from "react-icons/fc";
 import styles from "../styles/Modal.module.css";
 
 export default function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
     const [error, setError] = useState("");
 
     if (!isOpen) return null;
+
+    const handleGoogleSignIn = async () => {
+        setGoogleLoading(true);
+        setError("");
+        try {
+            await signIn("google", {
+                callbackUrl: window.location.href,
+            });
+        } catch (error) {
+            console.error("Google sign in error:", error);
+            setError("Failed to sign in with Google");
+            setGoogleLoading(false);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -49,6 +65,20 @@ export default function LoginModal({ isOpen, onClose, onSwitchToSignup }) {
                     </button>
                 </div>
                 <div className={styles.modalContent}>
+                    <button
+                        className={styles.googleButton}
+                        onClick={handleGoogleSignIn}
+                        disabled={googleLoading || isLoading}
+                        type="button"
+                    >
+                        <FcGoogle size={20} />
+                        {googleLoading ? "Signing in..." : "Continue with Google"}
+                    </button>
+
+                    <div className={styles.divider}>
+                        <span>or</span>
+                    </div>
+
                     <form onSubmit={handleSubmit}>
                         {error && <div className={styles.errorMessage}>{error}</div>}
 

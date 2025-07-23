@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import styles from "./ShareButton.module.css";
-import { FiShare2, FiCopy, FiEdit, FiEye } from "react-icons/fi";
+import { FiShare2, FiCopy, FiEdit, FiEye, FiLock } from "react-icons/fi";
 
-export default function ShareButton({ editCode, viewCode }) {
+export default function ShareButton({ editCode, viewCode, isGuest = false }) {
+    const { data: session } = useSession();
+    const isAuthenticated = !!session;
     const [showModal, setShowModal] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
-    const [activeLink, setActiveLink] = useState("edit");
+    const [activeLink, setActiveLink] = useState("view"); // Default to view for guests
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
     const shareUrl = `${window.location.origin}/editor/${activeLink === "edit" ? editCode : viewCode}`;
 
@@ -17,6 +21,16 @@ export default function ShareButton({ editCode, viewCode }) {
 
     const toggleModal = () => {
         setShowModal(!showModal);
+        setShowLoginPrompt(false);
+    };
+
+    const handleEditAccessClick = () => {
+        if (!isAuthenticated || isGuest) {
+            setShowLoginPrompt(true);
+        } else {
+            setActiveLink("edit");
+            setShowLoginPrompt(false);
+        }
     };
 
     return (
@@ -42,21 +56,34 @@ export default function ShareButton({ editCode, viewCode }) {
                             <div className={styles.linkTypeSelector}>
                                 {editCode && (
                                     <button
-                                        className={`${styles.linkType} ${activeLink === "edit" ? styles.active : ""}`}
-                                        onClick={() => setActiveLink("edit")}
+                                        className={`${styles.linkType} ${activeLink === "edit" ? styles.active : ""} ${
+                                            !isAuthenticated || isGuest ? styles.disabled : ""
+                                        }`}
+                                        onClick={handleEditAccessClick}
                                     >
                                         <FiEdit size={14} />
                                         <span>Edit Access</span>
+                                        {(!isAuthenticated || isGuest) && <FiLock size={12} />}
                                     </button>
                                 )}
                                 <button
                                     className={`${styles.linkType} ${activeLink === "view" ? styles.active : ""}`}
-                                    onClick={() => setActiveLink("view")}
+                                    onClick={() => {
+                                        setActiveLink("view");
+                                        setShowLoginPrompt(false);
+                                    }}
                                 >
                                     <FiEye size={14} />
                                     <span>View Only</span>
                                 </button>
                             </div>
+
+                            {showLoginPrompt && (
+                                <div className={styles.loginPrompt}>
+                                    <p>🔒 Sign in required to share editable projects</p>
+                                    <p>Create an account to enable edit access sharing and save your projects.</p>
+                                </div>
+                            )}
 
                             <div className={styles.shareLinkContainer}>
                                 <input type="text" value={shareUrl} readOnly className={styles.shareUrlInput} />

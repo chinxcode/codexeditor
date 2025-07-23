@@ -111,6 +111,38 @@
     border-color: #4ecdc4;
 }
 
+.linkType.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #2c2c2c;
+    color: #666;
+}
+
+.linkType.disabled:hover {
+    background: #2c2c2c;
+    color: #666;
+}
+
+.loginPrompt {
+    background: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+    color: #e0e0e0;
+}
+
+.loginPrompt p {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.loginPrompt p:last-child {
+    margin: 0;
+    opacity: 0.8;
+    font-size: 0.85rem;
+}
+
 .shareLinkContainer {
     display: flex;
     gap: 0.5rem;

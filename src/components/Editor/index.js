@@ -260,7 +260,7 @@ export default function CodeEditor({ initialData, readOnly, editCode, viewCode }
 
                     {!readOnly && (
                         <div className={styles.shareContainer}>
-                            <ShareButton editCode={editCode} viewCode={viewCode} />
+                            <ShareButton editCode={editCode} viewCode={viewCode} isGuest={!initialData?.userId} />
                         </div>
                     )}
                     <div className={styles.aiAssistantContainer}>

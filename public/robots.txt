@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /editor/
+Disallow: /dashboard
+Disallow: /api/
+
+# Allow access to favicon and other static assets
+Allow: /favicon.ico
+Allow: /logo.png
+Allow: /*.css$
+Allow: /*.js$
+Allow: /_next/
+
+# Sitemap location (optional)
+# Sitemap: https://yourdomain.com/sitemap.xml

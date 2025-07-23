@@ -2,6 +2,7 @@ import dbConnect from "../../../utils/dbConnect";
 import Project from "../../../models/Project";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
+import mongoose from "mongoose";
 
 export default async function handler(req, res) {
     if (req.method !== "GET") {
@@ -16,6 +17,12 @@ export default async function handler(req, res) {
 
         if (!session) {
             return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        // Validate that user ID is a valid MongoDB ObjectId
+        if (!mongoose.Types.ObjectId.isValid(session.user.id)) {
+            console.error("Invalid user ID format:", session.user.id);
+            return res.status(400).json({ message: "Invalid user ID format" });
         }
 
         // Get user's projects

@@ -2,16 +2,43 @@ import { useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import ChatBot from "./ChatBot";
 import { FiCode } from "react-icons/fi";
+import LoginModal from "../components/LoginModal";
+import SignupModal from "../components/SignupModal";
 
 const AIChatButton = ({ onCodeGenerated }) => {
     const { data: session } = useSession();
     const [isChatOpen, setIsChatOpen] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+
+    const openLoginModal = () => {
+        setIsLoginModalOpen(true);
+        setIsSignupModalOpen(false);
+    };
+
+    const closeLoginModal = () => {
+        setIsLoginModalOpen(false);
+    };
+
+    const closeSignupModal = () => {
+        setIsSignupModalOpen(false);
+    };
+
+    const switchToSignup = () => {
+        setIsLoginModalOpen(false);
+        setIsSignupModalOpen(true);
+    };
+
+    const switchToLogin = () => {
+        setIsSignupModalOpen(false);
+        setIsLoginModalOpen(true);
+    };
 
     const toggleChat = () => {
         if (!session) {
             // If not logged in, show login modal instead
-            signIn();
+            // signIn();
+            openLoginModal();
         } else {
             setIsChatOpen(!isChatOpen);
         }
@@ -36,6 +63,9 @@ const AIChatButton = ({ onCodeGenerated }) => {
             </button>
 
             {session && isChatOpen && <ChatBot isOpen={isChatOpen} toggleChat={toggleChat} onCodeGenerated={handleCodeGenerated} />}
+
+            <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} onSwitchToSignup={switchToSignup} />
+            <SignupModal isOpen={isSignupModalOpen} onClose={closeSignupModal} onSwitchToLogin={switchToLogin} />
         </>
     );
 };
