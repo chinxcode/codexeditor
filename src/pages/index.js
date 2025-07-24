@@ -165,6 +165,7 @@ export default function Home() {
                 <meta name="twitter:card" content="summary_large_image" />
                 <link rel="icon" href="/favicon.ico" />
                 <link rel="canonical" href="https://codexeditor.vercel.app" />
+                <script defer src="https://cloud.umami.is/script.js" data-website-id="d7e18806-3d6f-4107-a5ba-9d8d4ea50644"></script>
             </Head>
 
             {/* Header */}
