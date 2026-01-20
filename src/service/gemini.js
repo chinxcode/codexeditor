@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
@@ -6,15 +6,11 @@ if (!API_KEY) {
     console.warn("Warning: NEXT_PUBLIC_GEMINI_API_KEY is not defined. AI features will not work properly.");
 }
 
-// Initialize the Generative AI
-const genAI = new GoogleGenerativeAI(API_KEY);
+const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 // Function to create a new chat session with coding-specific context
-export const createChatSession = async (initialPrompt = "Hello") => {
+export const createChatSession = async (initialPrompt) => {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-        // Set up better system instructions for coding
         const codingSystemPrompt = `You are CodeX Assistant - a specialized AI coding assistant.
 
 GUIDELINES:
@@ -45,14 +41,18 @@ LIMITATIONS:
 - Cannot access user repositories
 - Cannot handle non-programming related questions`;
 
-        // Use the provided initialPrompt or the default system instructions
-        const initialSystemPrompt = initialPrompt || codingSystemPrompt;
+        const systemInstruction = initialPrompt || codingSystemPrompt;
 
-        const chat = model.startChat({
+        const chat = ai.chats.create({
+            model: "gemini-3-flash-preview",
+            config: {
+                systemInstruction: systemInstruction,
+                temperature: 1.0,
+            },
             history: [
                 {
                     role: "user",
-                    parts: [{ text: initialSystemPrompt }],
+                    parts: [{ text: "Hello" }],
                 },
                 {
                     role: "model",
@@ -63,11 +63,6 @@ LIMITATIONS:
                     ],
                 },
             ],
-            generationConfig: {
-                temperature: 0.4, // Lower temperature for more focused/accurate coding responses
-                topP: 0.95,
-                topK: 40,
-            },
         });
 
         return chat;
@@ -86,8 +81,8 @@ export const sendMessage = async (chatSession, message) => {
             enhancedMessage = `${message}\n\nNote: Please remember I'm a coding assistant and can only help with programming and development topics.`;
         }
 
-        const result = await chatSession.sendMessage(enhancedMessage);
-        return result.response.text();
+        const result = await chatSession.sendMessage({ message: enhancedMessage });
+        return result.text;
     } catch (error) {
         console.error("Error sending message:", error);
         throw error;
@@ -97,16 +92,14 @@ export const sendMessage = async (chatSession, message) => {
 // Function for one-off prompts without maintaining a session
 export const generateResponse = async (prompt) => {
     try {
-        const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
-            generationConfig: {
-                temperature: 0.4,
-                topP: 0.95,
-                topK: 40,
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: prompt,
+            config: {
+                temperature: 1.0, // Keeping default temperature as recommended by Gemini API docs
             },
         });
-        const result = await model.generateContent(prompt);
-        return result.response.text();
+        return response.text;
     } catch (error) {
         console.error("Error generating response:", error);
         throw error;
@@ -193,15 +186,6 @@ function isCodingRelated(message) {
 // Function to generate HTML, CSS, and JS code based on a prompt
 export const generateCode = async (prompt) => {
     try {
-        const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
-            generationConfig: {
-                temperature: 0.3, // Lower temperature for more precise code generation
-                topP: 0.95,
-                topK: 40,
-            },
-        });
-
         // Enhance the prompt to ensure we get structured code output
         const enhancedPrompt = `
 Generate HTML, CSS, and JavaScript code based on the following request:
@@ -223,8 +207,15 @@ Please provide the code in the following format:
 Make sure the code is complete, functional, and follows best practices. The HTML, CSS, and JavaScript should work together to create the requested feature or design.
 `;
 
-        const result = await model.generateContent(enhancedPrompt);
-        const responseText = result.response.text();
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: enhancedPrompt,
+            config: {
+                temperature: 1.0, // Keeping default temperature as recommended by Gemini API docs
+            },
+        });
+
+        const responseText = response.text;
 
         // Parse the response to extract HTML, CSS, and JS code
         const htmlMatch = responseText.match(/```html\s*([\s\S]*?)\s*```/);
